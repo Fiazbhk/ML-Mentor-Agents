@@ -1,0 +1,173 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ml-mentor-model-selection-agent"
+version = "1.0.0"
+description = "ModelSelectionAgent for ML Mentor - Intelligent ML model recommendation system"
+authors = [
+    {name = "ML Mentor Team", email = "team@mlmentor.dev"},
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["machine-learning", "model-selection", "recommendations", "coral-protocol", "agent"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Data Scientists",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "numpy>=1.20.0",
+    "scikit-learn>=1.0.0",
+    "pandas>=1.3.0",
+    "fastapi>=0.68.0",
+    "uvicorn>=0.15.0",
+    "pydantic>=1.8.0",
+    "python-multipart>=0.0.5",
+    "python-dotenv>=0.19.0",
+    "loguru>=0.5.0",
+    "typing-extensions>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.2.0",
+    "pytest-asyncio>=0.15.0",
+    "pytest-cov>=2.12.0",
+    "black>=21.0.0",
+    "isort>=5.9.0",
+    "flake8>=3.9.0",
+    "mypy>=0.910",
+    "pre-commit>=2.13.0",
+    "jupyter>=1.0.0",
+    "matplotlib>=3.4.0",
+    "seaborn>=0.11.0",
+]
+
+coral = [
+    "coral-sdk>=0.1.0",
+    "coral-registry>=0.1.0",
+]
+
+ml-extended = [
+    "xgboost>=1.5.0",
+    "lightgbm>=3.2.0",
+    "catboost>=1.0.0",
+    "imbalanced-learn>=0.8.0",
+    "optuna>=2.10.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ml-mentor/model-selection-agent"
+Documentation = "https://docs.mlmentor.dev/agents/model-selection"
+Repository = "https://github.com/ml-mentor/model-selection-agent"
+Issues = "https://github.com/ml-mentor/model-selection-agent/issues"
+
+[project.scripts]
+model-selection-agent = "main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+exclude = [
+    "/.github",
+    "/tests",
+    "/.pytest_cache",
+    "/.mypy_cache",
+    "/notebooks",
+    "/experiments",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | notebooks
+  )/
+)
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["main"]
+known_third_party = ["numpy", "pandas", "sklearn", "fastapi", "pydantic"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "sklearn.*",
+    "numpy.*",
+    "pandas.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers --disable-warnings"
+testpaths = [
+    "tests",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "model_tests: marks tests that validate model recommendations",
+]
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "tests/*",
+    "setup.py",
+    "notebooks/*",
+    "experiments/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]

@@ -1,0 +1,4 @@
+[[local-agent]]
+path = "agents/DataAnalysisAgent"
+[[local-agent]]
+path = "agents/ModelSelectionAgent"
